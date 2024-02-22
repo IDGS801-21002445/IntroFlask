@@ -17,6 +17,16 @@
                 <a href="" class="brand">
                     IDGS - 801
                 </a>
+                <div class="container">
+                    {%with messages=get_flashed_messages()%}
+                        {%if messages%}
+                            {%for message in messages%}
+                            <div class="alert alert-success">
+                                {{message}}
+                            </div>
+                        {%endif%}
+                    {%endwith%}
+                </div>
                 <ul class="nav">
                     <li class="active">
                         <a href="/">

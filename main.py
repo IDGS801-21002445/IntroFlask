@@ -1,9 +1,26 @@
 import math
 from flask import Flask, render_template, request
+from flask import flash
+from flask_wtf.csrf import CSRFProtect
+from flask import g
 import forms
 
 app = Flask(__name__)
+##Forma de redirigir a págias de error
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
 
+@app.before_request
+def before_request():
+    g.nombre = 'Mario'
+    print('before 1')
+
+@app.after_request
+def after_request(response):
+    print('After 1')
+ 
+    return response
 @app.route("/")
 def index() :
     return render_template("index.html")
@@ -36,6 +53,7 @@ def operaciones():
 
 @app.route("/alumnos", methods=['GET','POST'])
 def alumnos():
+    print('alumno {}'.format(g.nombre))
     nom=""
     apa = ""
     ama = ""
@@ -54,7 +72,9 @@ def alumnos():
         print('amaterno: {}'.format(ama))
         print('edad: {}'.format(edad))
         print('email: {}'.format(email))
-
+        ##Mensajes de respuesta de la aplicación
+        mensaje='Bienvenido {}'.format(nom)
+        flash(mensaje)
 
     return render_template("alumnos.html", form=alumno_clase,nom=nom,apa=apa,ama=ama,email=email)
 
